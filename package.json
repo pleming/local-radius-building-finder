@@ -1,0 +1,12 @@
+{
+  "name": "local-radius-building-finder",
+  "version": "1.0.0",
+  "description": "Local radius building finder",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
