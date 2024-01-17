@@ -7,11 +7,134 @@
     </head>
 
     <body>
-        <div class="container-fluid">
-            <p>Local Radius Building Finder</p>
+        <div class="container-fluid container-root">
+            <div class="row mb-3 g-2">
+                <div class="form-check form-switch container-switch-latitude-longitude">
+                    <input class="form-check-input" type="checkbox" role="switch" id="switchLatitudeLongitude">
+                    <label class="form-check-label" for="switchLatitudeLongitude">Latitude/Longitude</label>
+                </div>
+                <div class="col-6">
+                    <div class="form-floating">
+                        <input type="number" class="form-control input-latitude-longitude" id="floatingLatitude" placeholder="100.123456789012">
+                        <label for="floatingLatitude">Latitude</label>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-floating">
+                        <input type="number" class="form-control input-latitude-longitude" id="floatingLongitude" placeholder="10.1234567890123">
+                        <label for="floatingLongitude">Longitude</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="switchBaseAddress">
+                    <label class="form-check-label" for="switchBaseAddress">Base Address</label>
+                </div>
+                <input type="text" name="inputSearchBaseAddress" class="form-control" id="inputSearchBaseAddress" placeholder="Base Address (Example : 경기도 수원시 영통구 삼성로 129)">
+            </div>
+
+            <div class="mb-3">
+                <label for="inputSearchRadius" class="form-label">Radius (Unit : meter)</label>
+                <input type="number" name="inputSearchRadius" class="form-control" id="inputSearchRadius" placeholder="Radius (Example : 13240)">
+            </div>
+
+            <div class="mb-3">
+                <label for="inputSearchKeyword" class="form-label">Keyword</label>
+                <input type="text" name="inputSearchKeyword" class="form-control" id="inputSearchKeyword" placeholder="Keyword (Example : Factory)">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Accuracy Improvement</label>
+                <div class="d-grid gap-2">
+                    <button type="button" class="btn btn-outline-primary" id="btnKeywordCategoryRule">Keyword/Category Rules <span class="badge text-bg-danger" id="badgeKeywordCategoryRuleCount"></span></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-extract-buildings">
+            <div class="d-grid gap-2">
+                <button type="button" class="btn btn-primary" id="btnExtractBuildingsData">Extract buildings data</button>
+            </div>
         </div>
 
         <!-- Modal -->
+        <div class="modal fade" id="keywordCategoryRuleModal" tabindex="-1" aria-labelledby="keywordCategoryRuleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="keywordCategoryRuleModalLabel">Keyword/Category Rules</h1>
+                        <button type="button" class="btn-close" aria-label="Close" id="keywordCategoryRuleModalClose"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="list-group list-group-keyword-category-rule" id="listGroupKeywordCategoryRule">
+                            <div class="list-item-keyword-category-rule">
+                                <button type="button" class="list-group-item list-group-item-action">Factory</button>
+                                <button type="button" class="btn-close icon-remove-keyword-category-rule" aria-label="close"></button>
+                            </div>
+                            <div class="list-item-keyword-category-rule">
+                                <button type="button" class="list-group-item list-group-item-action">Park</button>
+                                <button type="button" class="btn-close icon-remove-keyword-category-rule" aria-label="close"></button>
+                            </div>
+                            <div class="list-item-keyword-category-rule">
+                                <button type="button" class="list-group-item list-group-item-action">Company</button>
+                                <button type="button" class="btn-close icon-remove-keyword-category-rule" aria-label="close"></button>
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="button" class="btn btn-outline-secondary" id="btnNewKeywordCategoryRule">+</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="keywordCategoryMappingModal" tabindex="-1" aria-labelledby="keywordCategoryMappingModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="keywordCategoryMappingModalLabel">Keyword/Category Mapping</h1>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="inputMappingKeyword" class="form-label">Mapping Keyword</label>
+                            <input type="text" name="inputMappingKeyword" class="form-control" id="inputMappingKeyword" placeholder="Mapping Keyword (Example : Factory)">
+                        </div>
+                        <div class="mb-3">
+                            <label for="txtMappingCategoryList" class="form-label">Mapping Category List</label>
+                            <textarea class="form-control" id="txtMappingCategoryList" rows="10" placeholder="Category List (Newline-seperated)&#13;&#10;&#13;&#10;(Example)&#13;&#10;Restaurant&#13;&#10;Government office"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" id="btnCancelKeywordCategoryMapping">Cancel</button>
+                        <button type="button" class="btn btn-primary" id="btnConfirmKeywordCategoryMapping">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="keywordCategoryMappingDeleteModal" tabindex="-1" aria-labelledby="keywordCategoryMappingDeleteModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="keywordCategoryMappingDeleteModalLabel">Confirm delete Keyword/Category mapping</h1>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <p><span class="txt-caution">[CAUTION]</span> If you delete the mapping, it cannot be recovered. It is recommended to take measures such as saving configuration before deletion.</p>
+                            <p>Please enter the keyword <span id="deleteKeywordText"></span> to delete.</p>
+                            <input type="text" name="inputDeleteKeywordConfirmText" class="form-control" id="inputDeleteKeywordConfirmText" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" id="btnCancelDeleteKeywordCategoryMapping">Cancel</button>
+                        <button type="button" class="btn btn-danger" id="btnConfirmDeleteKeywordCategoryMapping">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="modal fade" id="aboutModal" tabindex="-1" aria-labelledby="aboutModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
             <div class="modal-dialog">
                 <div class="modal-content">
