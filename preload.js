@@ -1,5 +1,24 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
+contextBridge.exposeInMainWorld("electronSearch", {
+    "searchKeyword": async (query, restApiKey) => {
+        return await ipcRenderer.invoke("search:keyword", { query, restApiKey });
+    }
+});
+
+contextBridge.exposeInMainWorld("electronLoading", {
+    "listenStartLoading": async (callback) => {
+        ipcRenderer.on("loading:start", (event, message) => {
+            callback(message);
+        });
+    },
+    "listenEndLoading": async (callback) => {
+        ipcRenderer.on("loading:end", (event, message) => {
+            callback(message);
+        });
+    }
+});
+
 contextBridge.exposeInMainWorld("electronMenu", {
     "listenOpenAbout": async (callback) => {
         ipcRenderer.on("menu:about", (event, message) => {

@@ -2,9 +2,15 @@ const { app, BrowserWindow, ipcMain, Menu, dialog } = require("electron");
 const path = require("path");
 
 const MenuLoader = require("./src/common/menu-loader");
-const DialogListener = require("./src/listener/dialog-listener");
-
 const { ACTIVE_PROFILE } = require("./src/common/const");
+
+const KakaoLocalInstance = require("./src/axios/instance/kakao-local-instance");
+const KakaoLocalClient = require("./src/axios/client/kakao-local-client");
+const NaverMapClient = require("./src/puppeteer/naver-map-client");
+const LocalMapSearchService = require("./src/service/local-map-search-service");
+const FileService = require("./src/service/file-service");
+const SearchListener = require("./src/listener/search-listener");
+const DialogListener = require("./src/listener/dialog-listener");
 
 const createWindow = () => {
     const win = new BrowserWindow({
@@ -35,8 +41,15 @@ app.whenReady().then(() => {
         }
     });
 
+    const kakaoLocalInstance = new KakaoLocalInstance();
+    const kakaoLocalClient = new KakaoLocalClient(kakaoLocalInstance);
+    const naverMapClient = new NaverMapClient();
+    const localMapSearchService = new LocalMapSearchService(kakaoLocalClient, naverMapClient);
+    const fileService = new FileService(dialog);
+    const searchListener = new SearchListener(ipcMain, browserWindow, localMapSearchService, fileService);
     const dialogListener = new DialogListener(ipcMain, dialog);
 
+    searchListener.registerListener();
     dialogListener.registerListener();
 });
 

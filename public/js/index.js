@@ -1,4 +1,6 @@
+import localMapSearchService from "./service/local-map-search-service.js";
 import keywordCategoryRuleModal from "./modal/keyword-category-rule-modal.js";
+import loadingService from "./service/loading-service.js";
 
 const initialize = () => {
     $("#switchLatitudeLongitude").prop("checked", true);
@@ -19,11 +21,20 @@ const registerEvent = () => {
         keywordCategoryRuleModal.show();
     });
 
-    $("#btnExtractBuildingsData").click(() => {
+    $("#btnExtractBuildingsData").click(async () => {
+        await localMapSearchService.searchBuildings();
     });
 };
 
 const listenIPCMessage = () => {
+    window.electronLoading.listenStartLoading((message) => {
+        loadingService.startLoading(message.title, message.body);
+    });
+
+    window.electronLoading.listenEndLoading((message) => {
+        loadingService.endLoading();
+    });
+
     window.electronMenu.listenOpenAbout(async (message) => {
         $("#aboutModal").modal("show");
     });
@@ -47,6 +58,7 @@ const switchBaseAddress = () => {
 
 $(() => {
     initialize();
+    loadingService.initialize();
     keywordCategoryRuleModal.initialize();
 
     registerEvent();
