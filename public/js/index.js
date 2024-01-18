@@ -1,6 +1,8 @@
 import localMapSearchService from "./service/local-map-search-service.js";
-import keywordCategoryRuleModal from "./modal/keyword-category-rule-modal.js";
 import loadingService from "./service/loading-service.js";
+
+import keywordCategoryRuleModal from "./modal/keyword-category-rule-modal.js";
+import restApiKeyModal from "./modal/rest-api-key-modal.js";
 
 const initialize = () => {
     $("#switchLatitudeLongitude").prop("checked", true);
@@ -31,11 +33,15 @@ const listenIPCMessage = () => {
         loadingService.startLoading(message.title, message.body);
     });
 
-    window.electronLoading.listenEndLoading((message) => {
+    window.electronLoading.listenEndLoading(() => {
         loadingService.endLoading();
     });
 
-    window.electronMenu.listenOpenAbout(async (message) => {
+    window.electronMenu.listenOpenRestApiKey(async () => {
+        restApiKeyModal.show();
+    });
+
+    window.electronMenu.listenOpenAbout(async () => {
         $("#aboutModal").modal("show");
     });
 };
@@ -60,9 +66,11 @@ $(() => {
     initialize();
     loadingService.initialize();
     keywordCategoryRuleModal.initialize();
+    restApiKeyModal.initialize();
 
     registerEvent();
     keywordCategoryRuleModal.registerEvent();
+    restApiKeyModal.registerEvent();
 
     listenIPCMessage();
 });

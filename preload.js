@@ -20,6 +20,11 @@ contextBridge.exposeInMainWorld("electronLoading", {
 });
 
 contextBridge.exposeInMainWorld("electronMenu", {
+    "listenOpenRestApiKey": async (callback) => {
+        ipcRenderer.on("menu:restApiKey", (event, message) => {
+            callback(message);
+        });
+    },
     "listenOpenAbout": async (callback) => {
         ipcRenderer.on("menu:about", (event, message) => {
             callback(message);
