@@ -1,3 +1,5 @@
+import keywordCategoryMappingService from "../service/keyword-category-mapping-service.js";
+
 import keywordCategoryMappingModal from "./keyword-category-mapping-modal.js";
 import keywordCategoryMappingDeleteModal from "./keyword-category-mapping-delete-modal.js";
 
@@ -11,18 +13,10 @@ const initialize = () => {
     keywordCategoryMappingDeleteModal.registerEvent();
 };
 
-const show = () => {
-    $("#keywordCategoryRuleModal").modal("show");
-};
-
-const hide = () => {
-    $("#keywordCategoryRuleModal").modal("hide");
-};
-
 const registerEvent = () => {
     $("#listGroupKeywordCategoryRule").on("click", ".list-item-keyword-category-rule > .list-group-item", (event) => {
         hide();
-        keywordCategoryMappingModal.show($(event.target).text());
+        keywordCategoryMappingModal.show($(event.target).attr("data-keyword-category-map-id"));
     });
 
     $("#btnNewKeywordCategoryRule").click(() => {
@@ -36,7 +30,7 @@ const registerEvent = () => {
 
     $("#listGroupKeywordCategoryRule").on("click", ".list-item-keyword-category-rule > .icon-remove-keyword-category-rule", (event) => {
         hide();
-        keywordCategoryMappingDeleteModal.show($(event.target).prev().text());
+        keywordCategoryMappingDeleteModal.show($(event.target).prev().attr("data-keyword-category-map-id"));
     });
 
     keywordCategoryMappingDeleteModal.listenHideModal(() => {
@@ -54,6 +48,16 @@ const registerEvent = () => {
     $("#keywordCategoryRuleModalClose").click(()=>{
         hide();
     });
+};
+
+const show = () => {
+    keywordCategoryMappingService.initialize();
+
+    $("#keywordCategoryRuleModal").modal("show");
+};
+
+const hide = () => {
+    $("#keywordCategoryRuleModal").modal("hide");
 };
 
 export default {

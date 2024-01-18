@@ -1,4 +1,5 @@
 import localMapSearchService from "./service/local-map-search-service.js";
+import keywordCategoryMappingService from "./service/keyword-category-mapping-service.js";
 import loadingService from "./service/loading-service.js";
 
 import keywordCategoryRuleModal from "./modal/keyword-category-rule-modal.js";
@@ -73,6 +74,7 @@ $(() => {
     keywordCategoryRuleModal.initialize();
     restApiKeyModal.initialize();
     requestDelayModal.initialize();
+    keywordCategoryMappingService.initialize();
 
     registerEvent();
     keywordCategoryRuleModal.registerEvent();

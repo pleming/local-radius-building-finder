@@ -1,5 +1,6 @@
 import restApiKeyService from "./rest-api-key-service.js";
 import requestDelayService from "./request-delay-service.js";
+import keywordCategoryMappingService from "./keyword-category-mapping-service.js";
 
 import StringUtils from "../util/string-utils.js";
 import Constants from "../common/const.js";
@@ -41,6 +42,9 @@ const extractSearchQuery = () => {
     query.radius = $("#inputSearchRadius").val();
     query.keyword = $("#inputSearchKeyword").val();
 
+    const { categoryList } = keywordCategoryMappingService.loadKeywordCategoryMapByKeyword(query.keyword);
+    query.categoryList = categoryList;
+
     return query;
 };
 
@@ -64,12 +68,19 @@ const validateConfiguration = () => {
 
 const verifySearchQuery = (query) => {
     for (const key in query) {
-        if (!StringUtils.hasText(query[key])) {
-            const errorMessage = `${key} is empty`;
-            window.electronDialog.error(errorMessage);
-            throw new Error(errorMessage);
+        if (key === Constants.ATTR.CATEGORY_LIST) {
+            if (!Array.isArray(query[key])) {
+                raiseError(`${key} is not array`);
+            }
+        } else if (!StringUtils.hasText(query[key])) {
+            raiseError(`${key} is empty`);
         }
     }
+};
+
+const raiseError = (errorMessage) => {
+    window.electronDialog.error(errorMessage);
+    throw new Error(errorMessage);
 };
 
 export default {

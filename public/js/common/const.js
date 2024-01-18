@@ -1,7 +1,12 @@
 export default {
+    "ATTR": {
+        "KEYWORD": "keyword",
+        "CATEGORY_LIST": "categoryList"
+    },
     "LOCAL_STORAGE": {
         "REST_API_KEY": "restApiKey",
-        "REQUEST_DELAY": "requestDelay"
+        "REQUEST_DELAY": "requestDelay",
+        "KEYWORD_CATEGORY_MAP": "keywordCategoryMap"
     },
     "VALIDATION": {
         "REST_API_KEY_LENGTH": 32,
