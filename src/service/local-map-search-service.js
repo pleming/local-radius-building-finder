@@ -20,7 +20,9 @@ class LocalMapSearchService {
         const latLongRange = this.#calcLatLongRangeByRadius(Number(query.latitude), Number(query.longitude), radius);
         const buildingList = await this.#naverMapClient.searchKeyword(query.keyword, query.latitude, query.longitude, latLongRange, requestDelay);
 
-        const convertedBuildingList = this.#convertDistanceUnitToMeter(buildingList);
+        const filteredBuildingList = this.#filterByCategoryList(buildingList, query.categoryList);
+        const convertedBuildingList = this.#convertDistanceUnitToMeter(filteredBuildingList);
+
         return this.#filterByDistance(convertedBuildingList, radius);
     }
 
@@ -67,6 +69,10 @@ class LocalMapSearchService {
 
     #attachMSExcelBOM(csvString) {
         return StringUtils.hasText(csvString) ? `${SYMBOL.MS_EXCEL.BOM}${csvString}` : csvString;
+    }
+
+    #filterByCategoryList(buildingList, categoryList) {
+        return CollectionUtils.isEmpty(categoryList) ? buildingList : buildingList.filter((building) => categoryList.some((category) => category === building.category));
     }
 
     #convertDistanceUnitToMeter(buildingList) {
