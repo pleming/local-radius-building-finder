@@ -156,6 +156,31 @@
             </div>
         </div>
 
+        <div class="modal fade" id="requestDelayModal" tabindex="-1" aria-labelledby="requestDelayModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="requestDelayModalLabel">Input request delay</h1>
+                        <button type="button" class="btn-close" aria-label="Close" id="btnRequestDelayModalClose"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="inputAvgDelay" class="form-label">Average delay (Unit : ms)</label>
+                            <input type="number" name="inputAvgDelay" class="form-control" id="inputAvgDelay" placeholder="Average delay (Example : 3000)" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="inputUpperLimitDelay" class="form-label">Upper limit delay (Unit : ms)</label>
+                            <input type="number" name="inputUpperLimitDelay" class="form-control" id="inputUpperLimitDelay" placeholder="Upper limit delay (Example : 6000)" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" id="btnRequestDelayModalCancel">Cancel</button>
+                        <button type="button" class="btn btn-primary" id="btnConfirmRequestDelay">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="modal fade" id="aboutModal" tabindex="-1" aria-labelledby="aboutModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
             <div class="modal-dialog">
                 <div class="modal-content">

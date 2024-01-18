@@ -16,6 +16,13 @@ class MenuLoader {
                         "click": () => {
                             this.#browserWindow.webContents.send("menu:restApiKey", {});
                         }
+                    },
+                    {
+                        "label": "Request delay",
+                        "accelerator": "CmdOrCtrl+Shift+D",
+                        "click": () => {
+                            this.#browserWindow.webContents.send("menu:requestDelay", {});
+                        }
                     }
                 ]
             },

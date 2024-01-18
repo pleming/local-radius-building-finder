@@ -1,4 +1,5 @@
 import restApiKeyService from "./rest-api-key-service.js";
+import requestDelayService from "./request-delay-service.js";
 
 import StringUtils from "../util/string-utils.js";
 import Constants from "../common/const.js";
@@ -17,7 +18,7 @@ const searchBuildings = async () => {
     const query = extractSearchQuery();
     verifySearchQuery(query);
 
-    const searchResponse = await window.electronSearch.searchKeyword(query, restApiKeyService.loadRestApiKey());
+    const searchResponse = await window.electronSearch.searchKeyword(query, restApiKeyService.loadRestApiKey(), requestDelayService.loadRequestDelay());
 
     if (!searchResponse.status) {
         window.electronDialog.error(searchResponse.message);
@@ -48,6 +49,13 @@ const validateConfiguration = () => {
 
     if (!restApiKey) {
         window.electronDialog.error("REST API Key is not configured");
+        return false;
+    }
+
+    const requestDelay = requestDelayService.loadRequestDelay();
+
+    if (!requestDelay) {
+        window.electronDialog.error("Request delay is not configured");
         return false;
     }
 

@@ -11,14 +11,14 @@ class LocalMapSearchService {
         this.#naverMapClient = naverMapClient;
     }
 
-    async searchKeyword(query, restApiKey) {
+    async searchKeyword(query, restApiKey, requestDelay) {
         if (query.baseAddress) {
             query = await this.#convertBaseAddress(query, restApiKey);
         }
 
         const radius = Number(query.radius);
         const latLongRange = this.#calcLatLongRangeByRadius(Number(query.latitude), Number(query.longitude), radius);
-        const buildingList = await this.#naverMapClient.searchKeyword(query.keyword, query.latitude, query.longitude, latLongRange);
+        const buildingList = await this.#naverMapClient.searchKeyword(query.keyword, query.latitude, query.longitude, latLongRange, requestDelay);
 
         const convertedBuildingList = this.#convertDistanceUnitToMeter(buildingList);
         return this.#filterByDistance(convertedBuildingList, radius);

@@ -59,10 +59,6 @@ const LAT_LONG = {
     "EARTH_RADIUS": 6371
 };
 
-const LOCAL_STORAGE = {
-    "REST_API_KEY": "restApiKey"
-};
-
 exports = module.exports = {
     ACTIVE_PROFILE,
     SYMBOL,
@@ -70,6 +66,5 @@ exports = module.exports = {
     HTTP_STATUS,
     HEADER,
     AXIOS,
-    LAT_LONG,
-    LOCAL_STORAGE
+    LAT_LONG
 };

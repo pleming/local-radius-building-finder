@@ -32,8 +32,8 @@ class SearchListener {
             });
 
             try {
-                const { query, restApiKey } = message;
-                const buildingList = await this.#localMapSearchService.searchKeyword(query, restApiKey);
+                const { query, restApiKey, requestDelay } = message;
+                const buildingList = await this.#localMapSearchService.searchKeyword(query, restApiKey, requestDelay);
 
                 const csvRecordData = this.#localMapSearchService.convertCSVRecords(buildingList);
                 this.#fileService.saveFile(filePath, csvRecordData);
