@@ -19,12 +19,12 @@ class NaverMapClient {
         await this.#browser.close();
     }
 
-    async searchKeyword(keyword, latitude, longitude, latLongRange) {
+    async searchKeyword(keyword, latitude, longitude, latLongRange, requestDelay) {
         await this.#prepareDriver();
         await this.#loadPage(keyword, latitude, longitude, latLongRange);
 
         const buildingList = await this.#collectFirstPage();
-        buildingList.push(...await this.#collectRemainPage());
+        buildingList.push(...await this.#collectRemainPage(requestDelay));
 
         await this.#teardownDriver();
         return buildingList;
@@ -65,7 +65,7 @@ class NaverMapClient {
         });
     }
 
-    async #collectRemainPage() {
+    async #collectRemainPage(requestDelay) {
         return new Promise(async (resolve) => {
             const buildingList = [];
 
@@ -102,6 +102,7 @@ class NaverMapClient {
                         return;
                     }
 
+                    await this.#delayExpDist(requestDelay.avgDelay, requestDelay.upperLimitDelay);
                     await nextPageButton.click();
                 }
             });

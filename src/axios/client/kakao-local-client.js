@@ -25,8 +25,8 @@ class KakaoLocalClient {
                 data
             };
         } catch (error) {
-            console.error(error);
-            throw error;
+            console.error(error.response.data);
+            throw new Error(error.response.data.message);
         }
     }
 }

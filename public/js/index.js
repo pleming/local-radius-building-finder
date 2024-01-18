@@ -3,6 +3,7 @@ import loadingService from "./service/loading-service.js";
 
 import keywordCategoryRuleModal from "./modal/keyword-category-rule-modal.js";
 import restApiKeyModal from "./modal/rest-api-key-modal.js";
+import requestDelayModal from "./modal/request-delay-modal.js";
 
 const initialize = () => {
     $("#switchLatitudeLongitude").prop("checked", true);
@@ -41,6 +42,10 @@ const listenIPCMessage = () => {
         restApiKeyModal.show();
     });
 
+    window.electronMenu.listenOpenRequestDelay(async () => {
+        requestDelayModal.show();
+    });
+
     window.electronMenu.listenOpenAbout(async () => {
         $("#aboutModal").modal("show");
     });
@@ -67,10 +72,12 @@ $(() => {
     loadingService.initialize();
     keywordCategoryRuleModal.initialize();
     restApiKeyModal.initialize();
+    requestDelayModal.initialize();
 
     registerEvent();
     keywordCategoryRuleModal.registerEvent();
     restApiKeyModal.registerEvent();
+    requestDelayModal.registerEvent();
 
     listenIPCMessage();
 });
