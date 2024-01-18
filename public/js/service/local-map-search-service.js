@@ -1,5 +1,7 @@
-import Constants from "../common/const.js";
+import restApiKeyService from "./rest-api-key-service.js";
+
 import StringUtils from "../util/string-utils.js";
+import Constants from "../common/const.js";
 
 const searchBuildings = async () => {
     const response = await window.electronDialog.confirm("Extract building data");
@@ -8,12 +10,16 @@ const searchBuildings = async () => {
         return;
     }
 
+    if (!validateConfiguration()) {
+        return;
+    }
+
     const query = extractSearchQuery();
     verifySearchQuery(query);
 
     const searchResponse = await window.electronSearch.searchKeyword(query, "restApiKey");
 
-    if(!searchResponse.status) {
+    if (!searchResponse.status) {
         window.electronDialog.error(searchResponse.message);
         return;
     }
@@ -35,6 +41,17 @@ const extractSearchQuery = () => {
     query.keyword = $("#inputSearchKeyword").val();
 
     return query;
+};
+
+const validateConfiguration = () => {
+    const restApiKey = restApiKeyService.loadRestApiKey();
+
+    if (!restApiKey) {
+        window.electronDialog.error("REST API Key is not configured");
+        return false;
+    }
+
+    return true;
 };
 
 const verifySearchQuery = (query) => {

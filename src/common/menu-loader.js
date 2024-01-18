@@ -8,6 +8,18 @@ class MenuLoader {
     load() {
         return [
             {
+                "label": "Setup",
+                "submenu": [
+                    {
+                        "label": "REST API Key",
+                        "accelerator": "CmdOrCtrl+Shift+R",
+                        "click": () => {
+                            this.#browserWindow.webContents.send("menu:restApiKey", {});
+                        }
+                    }
+                ]
+            },
+            {
                 "label": "Help",
                 "submenu": [
                     {
