@@ -8,7 +8,7 @@ class NaverMapClient {
 
     async #prepareDriver() {
         this.#browser = await puppeteer.launch({
-            "headless": false,
+            "headless": "new",
             "args": ["--ignore-certificate-errors"]
         });
 
