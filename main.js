@@ -10,6 +10,7 @@ const NaverMapClient = require("./src/puppeteer/naver-map-client");
 const LocalMapSearchService = require("./src/service/local-map-search-service");
 const FileService = require("./src/service/file-service");
 const SearchListener = require("./src/listener/search-listener");
+const ConfigListener = require("./src/listener/config-listener");
 const DialogListener = require("./src/listener/dialog-listener");
 
 const createWindow = () => {
@@ -33,7 +34,16 @@ const createWindow = () => {
 app.whenReady().then(() => {
     const browserWindow = createWindow();
 
-    Menu.setApplicationMenu(Menu.buildFromTemplate(new MenuLoader(browserWindow).load()));
+    const kakaoLocalInstance = new KakaoLocalInstance();
+    const kakaoLocalClient = new KakaoLocalClient(kakaoLocalInstance);
+    const naverMapClient = new NaverMapClient();
+    const localMapSearchService = new LocalMapSearchService(kakaoLocalClient, naverMapClient);
+    const fileService = new FileService(dialog);
+    const searchListener = new SearchListener(ipcMain, browserWindow, localMapSearchService, fileService);
+    const configListener = new ConfigListener(ipcMain, browserWindow, fileService);
+    const dialogListener = new DialogListener(ipcMain, dialog);
+
+    Menu.setApplicationMenu(Menu.buildFromTemplate(new MenuLoader(browserWindow, dialog, fileService).load()));
 
     app.on("activate", () => {
         if (BrowserWindow.getAllWindows().length === 0) {
@@ -41,15 +51,8 @@ app.whenReady().then(() => {
         }
     });
 
-    const kakaoLocalInstance = new KakaoLocalInstance();
-    const kakaoLocalClient = new KakaoLocalClient(kakaoLocalInstance);
-    const naverMapClient = new NaverMapClient();
-    const localMapSearchService = new LocalMapSearchService(kakaoLocalClient, naverMapClient);
-    const fileService = new FileService(dialog);
-    const searchListener = new SearchListener(ipcMain, browserWindow, localMapSearchService, fileService);
-    const dialogListener = new DialogListener(ipcMain, dialog);
-
     searchListener.registerListener();
+    configListener.registerListener();
     dialogListener.registerListener();
 });
 

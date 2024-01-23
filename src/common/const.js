@@ -59,6 +59,17 @@ const LAT_LONG = {
     "EARTH_RADIUS": 6371
 };
 
+const ENCODING = {
+    "UTF_8": "utf-8"
+};
+
+const ELECTRON_DIALOG = {
+    "CONFIRM": {
+        "YES": 0,
+        "NO": 1
+    }
+};
+
 exports = module.exports = {
     ACTIVE_PROFILE,
     SYMBOL,
@@ -66,5 +77,7 @@ exports = module.exports = {
     HTTP_STATUS,
     HEADER,
     AXIOS,
-    LAT_LONG
+    LAT_LONG,
+    ENCODING,
+    ELECTRON_DIALOG
 };

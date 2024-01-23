@@ -20,6 +20,19 @@ contextBridge.exposeInMainWorld("electronLoading", {
 });
 
 contextBridge.exposeInMainWorld("electronMenu", {
+    "saveAs": async (configFilePath, configData) => {
+        return await ipcRenderer.invoke("config:save", { configFilePath, configData });
+    },
+    "listenOpenLoad": async (callback) => {
+        ipcRenderer.on("menu:load", (event, message) => {
+            callback(message);
+        });
+    },
+    "listenOpenSaveAs": async (callback) => {
+        ipcRenderer.on("menu:saveAs", (event, message) => {
+            callback(message);
+        });
+    },
     "listenOpenRestApiKey": async (callback) => {
         ipcRenderer.on("menu:restApiKey", (event, message) => {
             callback(message);

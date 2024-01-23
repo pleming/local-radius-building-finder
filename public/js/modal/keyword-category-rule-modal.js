@@ -1,16 +1,8 @@
-import keywordCategoryMappingService from "../service/keyword-category-mapping-service.js";
-
 import keywordCategoryMappingModal from "./keyword-category-mapping-modal.js";
 import keywordCategoryMappingDeleteModal from "./keyword-category-mapping-delete-modal.js";
 
 const initialize = () => {
     $(".icon-remove-keyword-category-rule").hide();
-
-    keywordCategoryMappingModal.initialize();
-    keywordCategoryMappingModal.registerEvent();
-
-    keywordCategoryMappingDeleteModal.initialize();
-    keywordCategoryMappingDeleteModal.registerEvent();
 };
 
 const registerEvent = () => {
@@ -51,8 +43,6 @@ const registerEvent = () => {
 };
 
 const show = () => {
-    keywordCategoryMappingService.initialize();
-
     $("#keywordCategoryRuleModal").modal("show");
 };
 

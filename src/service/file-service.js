@@ -1,4 +1,5 @@
 const fs = require("fs");
+const { ENCODING } = require("../common/const");
 
 class FileService {
     #dialog;
@@ -20,6 +21,10 @@ class FileService {
 
     saveFile(filePath, data) {
         fs.writeFileSync(filePath, data);
+    }
+
+    loadFile(filePath) {
+        return fs.readFileSync(filePath, ENCODING.UTF_8);
     }
 }
 
